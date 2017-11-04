@@ -1,0 +1,86 @@
+[
+  {
+    "title": "Природа",
+    "drawable": "",
+    "submenu": "",
+    "iap": false,
+    "tabs": [
+      {
+        "title": "Пейзаж",
+        "arguments": [
+          "luggelerunning"
+        ]
+      },
+      {
+        "title": "Море",
+        "arguments": [
+          "pedromgabriel"
+        ]
+      },
+      {
+        "title": "Космос",
+        "arguments": [
+          "just--space"
+        ]
+      },
+      {
+        "title": "Цветы",
+        "arguments": [
+          "uyamt"
+        ]
+      },
+      {
+        "title": "Небо",
+        "arguments": [
+          "myoursky"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Техника",
+    "drawable": "",
+    "submenu": "",
+    "iap": false,
+    "tabs": [
+      {
+        "title": "Автомобили",
+        "arguments": [
+          "karfavour"
+        ]
+      },
+      {
+        "title": "Мотоциклы",
+        "arguments": [
+          "chopperfun"
+        ]
+      },
+      {
+        "title": "Внедорожники",
+        "arguments": [
+          "ramtrucks"
+        ]
+      },
+      {
+        "title": "Самолёты",
+        "arguments": [
+          "fuckyeahaircraft"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Игры",
+    "drawable": "",
+    "submenu": "",
+    "iap": false,
+    "tabs": [
+      {
+        "title": "Final Fantasy Art",
+        "arguments": [
+          "flourish-of-steel"
+        ]
+      }
+    ]
+  }
+]

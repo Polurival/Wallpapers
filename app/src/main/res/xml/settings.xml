@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:key="preferenceScreen">
+
+    <PreferenceCategory
+        android:key="other"
+        android:title="@string/settings_other">
+        <Preference
+            android:key="rate"
+            android:title="@string/settings_rate"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="billing"
+        android:title="@string/settings_billing">
+        <Preference
+            android:key="purchase"
+            android:title="@string/settings_purchase"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>
