@@ -8,10 +8,10 @@
                 tools:context="com.github.polurival.wallpapers.MainActivity"
                 tools:showIn="@layout/activity_main">
 
-    <testapp.testwallpapers.util.DisableableViewPager
+    <com.github.polurival.wallpapers.util.DisableableViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </testapp.testwallpapers.util.DisableableViewPager>
+    </com.github.polurival.wallpapers.util.DisableableViewPager>
 
 </RelativeLayout>

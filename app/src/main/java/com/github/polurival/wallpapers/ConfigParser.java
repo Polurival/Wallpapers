@@ -9,6 +9,7 @@ import android.util.Log;
 import com.github.polurival.wallpapers.drawer.NavItem;
 import com.github.polurival.wallpapers.drawer.SimpleMenu;
 import com.github.polurival.wallpapers.drawer.SimpleSubMenu;
+import com.github.polurival.wallpapers.ui.WallpapersFragment;
 import com.github.polurival.wallpapers.util.Helper;
 
 import org.json.JSONArray;
@@ -58,11 +59,6 @@ public class ConfigParser extends AsyncTask<Void, Void, Void> {
         this.context = new WeakReference<>(context);
         this.menu = menu;
         this.callback = callback;
-    }
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
     }
 
     @Override
@@ -165,7 +161,7 @@ public class ConfigParser extends AsyncTask<Void, Void, Void> {
     public static NavItem navItemFromJSON(JSONObject jsonTab) throws JSONException {
         String tabTitle = jsonTab.getString("title");
 
-        Class<? extends Fragment> tabClass = null;
+        Class<? extends Fragment> tabClass = WallpapersFragment.class;
 
         JSONArray args = jsonTab.getJSONArray("arguments");
         List<String> list = new ArrayList<String>();

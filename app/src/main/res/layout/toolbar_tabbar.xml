@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<testapp.testwallpapers.util.CustomAppBarLayout
+<com.github.polurival.wallpapers.util.CustomAppBarLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/ToolBarStyle"
@@ -27,4 +27,4 @@
         app:tabSelectedTextColor="@android:color/white"
         app:tabTextColor="@android:color/white"/>
 
-</testapp.testwallpapers.util.CustomAppBarLayout>
+</com.github.polurival.wallpapers.util.CustomAppBarLayout>

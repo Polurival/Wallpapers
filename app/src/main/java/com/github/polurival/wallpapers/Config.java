@@ -16,6 +16,11 @@ public class Config {
 
     public static boolean USE_HARDCODED_CONFIG = false;
 
+    /**
+     * Интервал отображения межстраничного объявления
+     */
+    public static final int INTERSTITIAL_INTERVAL = 5;
+
 
     public static void configureMenu(SimpleMenu menu, ConfigParser.CallBack callback){
 

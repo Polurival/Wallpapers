@@ -1,5 +1,6 @@
 package com.github.polurival.wallpapers;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -12,6 +13,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,10 +27,18 @@ import android.widget.Toast;
 import com.github.polurival.wallpapers.drawer.MenuItemCallback;
 import com.github.polurival.wallpapers.drawer.NavItem;
 import com.github.polurival.wallpapers.drawer.SimpleMenu;
+import com.github.polurival.wallpapers.drawer.TabAdapter;
+import com.github.polurival.wallpapers.inherit.BackPressFragment;
+import com.github.polurival.wallpapers.inherit.PermissionsFragment;
 import com.github.polurival.wallpapers.util.DisableableViewPager;
 import com.github.polurival.wallpapers.util.Helper;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -42,14 +52,19 @@ public class MainActivity extends AppCompatActivity implements MenuItemCallback,
 
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
+    private TabLayout tabLayout;
+    private DisableableViewPager viewPager;
 
     public static String FRAGMENT_DATA = "transaction_data";
-    public static String FRAGMENT_CLASS = "transation_target";
+    public static String FRAGMENT_CLASS = "transaction_target";
 
     public static boolean TABLET_LAYOUT = true;
 
     List<NavItem> queueItem;
     MenuItem queueMenuItem;
+
+    private TabAdapter adapter;
+    private int interstitialCount = -1;
 
     /**
      * Проверяется корректность загрузки конфигурации из json-файла.
@@ -104,15 +119,15 @@ public class MainActivity extends AppCompatActivity implements MenuItemCallback,
             toggle.syncState();
         }
 
-        TabLayout tabLayout = findViewById(R.id.tabs);
-        DisableableViewPager viewPager = findViewById(R.id.viewpager);
+        tabLayout = findViewById(R.id.tabs);
+        viewPager = findViewById(R.id.viewpager);
 
         if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(FRAGMENT_CLASS)) {
             try {
                 Class<? extends Fragment> fragmentClass = (Class<? extends Fragment>) getIntent().getExtras().getSerializable(FRAGMENT_CLASS);
                 if (fragmentClass != null) {
                     String[] extra = getIntent().getExtras().getStringArray(FRAGMENT_DATA);
-
+                    HolderActivity.startActivity(this, fragmentClass, extra);
                     finish();
                 }
             } catch (Exception e) {
@@ -137,27 +152,65 @@ public class MainActivity extends AppCompatActivity implements MenuItemCallback,
         }
 
         applyDrawerLocks();
+
+        Helper.admobLoader(this, findViewById(R.id.adView));
+        Helper.updateAndroidSecurityProvider(this);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            public void onPageScrollStateChanged(int state) {
+            }
+
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            public void onPageSelected(int position) {
+                onTabBecomesActive(position);
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment activeFragment = null;
+        if (adapter != null) {
+            activeFragment = adapter.getCurrentFragment();
+        }
+
+        if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else if (activeFragment instanceof BackPressFragment) {
+            boolean handled = ((BackPressFragment) activeFragment).handleBackPress();
+            if (!handled) {
+                super.onBackPressed();
+            }
+        } else {
+            super.onBackPressed();
+        }
     }
 
     /**
      * Проверяем разрешения
      *
-     * @param requestCode код запроса
-     * @param permissions разрешения
+     * @param requestCode  код запроса
+     * @param permissions  разрешения
      * @param grantResults признаки включения разрешений
      */
+    @SuppressLint("WrongConstant")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         switch (requestCode) {
             case 1:
-                boolean foundfalse = false;
-                for (int grantResult : grantResults) {
-                    if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                        foundfalse = true;
+                boolean foundFalse = false;
+                int res;
+                for (String permission : permissions) {
+                    res = checkCallingOrSelfPermission(permission);
+                    if (!(res == PackageManager.PERMISSION_GRANTED)) {
+                        foundFalse = true;
                     }
                 }
-                if (!foundfalse) {
+
+                if (!foundFalse) {
                     menuItemClicked(queueItem, queueMenuItem, false);
                 } else {
                     Toast.makeText(MainActivity.this, getResources().getString(R.string.permissions_required), Toast.LENGTH_SHORT)
@@ -173,8 +226,8 @@ public class MainActivity extends AppCompatActivity implements MenuItemCallback,
      * Проверяем настройку отображения меню при первом старте приложения,
      * обрабатываем нажатия пунктов меню и поведение панели навигации.
      *
-     * @param actions список моделей меню
-     * @param item элемент меню
+     * @param actions          список моделей меню
+     * @param item             элемент меню
      * @param requiresPurchase признак платного меню
      */
     @Override
@@ -183,17 +236,37 @@ public class MainActivity extends AppCompatActivity implements MenuItemCallback,
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         boolean openOnStart = prefs.getBoolean("menuOpenOnStart", false);
         if (drawer != null) {
-            if (openOnStart && !useTabletMenu()) {
+            if (openOnStart && !useTabletMenu() && adapter == null) {
                 drawer.openDrawer(GravityCompat.START);
             } else {
                 drawer.closeDrawer(GravityCompat.START);
             }
         }
+
+        if (!checkPermissionsHandleIfNeeded(actions, item)) {
+            return;
+        }
+
         if (item != null) {
-            for (MenuItem menuItem : menu.getMenuItems())
+            for (MenuItem menuItem : menu.getMenuItems()) {
                 menuItem.setChecked(false);
+            }
             item.setChecked(true);
         }
+
+        adapter = new TabAdapter(getSupportFragmentManager(), actions, this);
+        viewPager.setAdapter(adapter);
+
+        if (actions.size() == 1) {
+            tabLayout.setVisibility(View.GONE);
+            viewPager.setPagingEnabled(false);
+        } else {
+            tabLayout.setVisibility(View.VISIBLE);
+            viewPager.setPagingEnabled(true);
+        }
+
+        showInterstitial(false);
+        onTabBecomesActive(0);
     }
 
     @Override
@@ -234,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements MenuItemCallback,
     }
 
     /**
-     *  Применяет соответствующие блокировки к панели навигации.
+     * Применяет соответствующие блокировки к панели навигации.
      */
     public void applyDrawerLocks() {
         if (drawer == null) {
@@ -248,5 +321,83 @@ public class MainActivity extends AppCompatActivity implements MenuItemCallback,
         } else {
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         }
+    }
+
+    /**
+     * Метод для управления отображением межстраничного баннера
+     */
+    private void onTabBecomesActive(int position) {
+        if (position != 0) {
+            showInterstitial(true);
+        }
+    }
+
+    /**
+     * Метод для отображения межстраничного баннера
+     */
+    private void showInterstitial(boolean fromPager) {
+        if (getResources().getString(R.string.admob_interstitial_id).length() == 0) {
+            return;
+        }
+
+        if (interstitialCount == (Config.INTERSTITIAL_INTERVAL - 1)) {
+            AdRequest adRequestInter = new AdRequest.Builder()
+                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    .build();
+            final InterstitialAd interstitialAd = new InterstitialAd(this);
+            interstitialAd.setAdUnitId(getResources().getString(R.string.admob_interstitial_id));
+            interstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdLoaded() {
+                    interstitialAd.show();
+                }
+            });
+            interstitialAd.loadAd(adRequestInter);
+
+            interstitialCount = 0;
+        } else {
+            interstitialCount++;
+        }
+    }
+
+    /**
+     * Метод проверяет, имеет ли элемент достаточные разрешения прежде чем быть открытым.
+     * Принимает вкладки для проверки и возвращает true, если элемент безопасен для открытия
+     */
+    private boolean checkPermissionsHandleIfNeeded(List<NavItem> tabs, MenuItem item) {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
+            return true;
+        }
+
+        List<String> allPermissions = new ArrayList<>();
+        for (NavItem tab : tabs) {
+            if (PermissionsFragment.class.isAssignableFrom(tab.getFragment())) {
+                try {
+                    allPermissions.addAll(Arrays.asList(((PermissionsFragment) tab.getFragment().newInstance()).requiredPermissions()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        if (allPermissions.size() > 1) {
+            boolean allGranted = true;
+            for (String permission : allPermissions) {
+                if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                    allGranted = false;
+                }
+            }
+
+            if (!allGranted) {
+                requestPermissions(allPermissions.toArray(new String[0]), 1);
+                queueItem = tabs;
+                queueMenuItem = item;
+                return false;
+            }
+
+            return true;
+        }
+
+        return true;
     }
 }

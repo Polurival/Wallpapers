@@ -5,9 +5,9 @@
     <string name="product_id"/>
 
 
-    <string name="admob_banner_id"/>
-    <string name="admob_interstitial_id"/>
-    <string name="admob_app_id"/>
+    <string name="admob_banner_id">ca-app-pub-3567156843644689/5544773327</string>
+    <string name="admob_interstitial_id">ca-app-pub-3567156843644689/9180766006</string>
+    <string name="admob_app_id">ca-app-pub-3567156843644689~3747695670</string>
 
 
     <string name="settings_other_summary">Другое</string>
