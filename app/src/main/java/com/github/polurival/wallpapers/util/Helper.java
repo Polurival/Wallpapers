@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 
 import com.github.polurival.wallpapers.R;
+import com.github.polurival.wallpapers.SettingsFragment;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -24,10 +25,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-/**
- * @author Polurival on 04.11.2017.
- */
 
 public class Helper {
 
@@ -121,7 +118,7 @@ public class Helper {
      */
     public static void admobLoader(Context context, View AdmobView) {
         String adId = context.getResources().getString(R.string.admob_banner_id);
-        if (!adId.equals("")) {
+        if (!"".equals(adId) && !SettingsFragment.getIsPurchased(context)) {
             AdView adView = (AdView) AdmobView;
             adView.setVisibility(View.VISIBLE);
 

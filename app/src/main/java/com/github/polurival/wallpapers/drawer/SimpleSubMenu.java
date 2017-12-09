@@ -7,8 +7,6 @@ import java.util.List;
 
 /**
  * Класс подменю
- *
- * @author Polurival on 04.11.2017.
  */
 
 public class SimpleSubMenu {

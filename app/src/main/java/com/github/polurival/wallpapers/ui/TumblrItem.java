@@ -7,8 +7,6 @@ import android.os.Parcelable;
  * Модель элемента списка получаемых с сервера и распарсеных наборов данных,
  * состоящих из id, link и url.
  * Эти данные используются для загрузки картинок.
- *
- * @author Polurival on 12.11.2017.
  */
 
 public class TumblrItem implements Parcelable {

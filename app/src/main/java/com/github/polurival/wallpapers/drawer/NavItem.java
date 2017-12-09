@@ -7,8 +7,6 @@ import java.io.Serializable;
 
 /**
  * Модель пункта меню панели навигации
- *
- * @author Polurival on 04.11.2017.
  */
 
 public class NavItem implements Serializable {

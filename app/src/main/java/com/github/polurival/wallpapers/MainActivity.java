@@ -41,10 +41,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * @author Polurival on 04.11.2017.
- */
-
 public class MainActivity extends AppCompatActivity implements MenuItemCallback, ConfigParser.CallBack {
 
     private NavigationView navigationView;
@@ -100,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements MenuItemCallback,
             setContentView(R.layout.activity_main);
         }
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar() != null) {
@@ -112,15 +108,15 @@ public class MainActivity extends AppCompatActivity implements MenuItemCallback,
         }
 
         if (!useTabletMenu()) {
-            drawer = findViewById(R.id.drawer);
+            drawer = (DrawerLayout) findViewById(R.id.drawer);
             toggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
             drawer.addDrawerListener(toggle);
             toggle.syncState();
         }
 
-        tabLayout = findViewById(R.id.tabs);
-        viewPager = findViewById(R.id.viewpager);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        viewPager = (DisableableViewPager) findViewById(R.id.viewpager);
 
         if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(FRAGMENT_CLASS)) {
             try {
@@ -136,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements MenuItemCallback,
         }
 
         //Menu items
-        navigationView = findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         menu = new SimpleMenu(navigationView.getMenu(), this);
         if (Config.USE_HARDCODED_CONFIG) {
             Config.configureMenu(menu, this);
@@ -243,6 +239,10 @@ public class MainActivity extends AppCompatActivity implements MenuItemCallback,
             }
         }
 
+        if (requiresPurchase && !isPurchased()) {
+            return;
+        }
+
         if (!checkPermissionsHandleIfNeeded(actions, item)) {
             return;
         }
@@ -277,13 +277,27 @@ public class MainActivity extends AppCompatActivity implements MenuItemCallback,
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.settings:
+                HolderActivity.startActivity(this, SettingsFragment.class, null);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        if (fragments != null)
-            for (Fragment frag : fragments)
-                if (frag != null)
+        if (fragments != null) {
+            for (Fragment frag : fragments) {
+                if (frag != null) {
                     frag.onActivityResult(requestCode, resultCode, data);
+                }
+            }
+        }
     }
 
     /**
@@ -339,6 +353,9 @@ public class MainActivity extends AppCompatActivity implements MenuItemCallback,
         if (getResources().getString(R.string.admob_interstitial_id).length() == 0) {
             return;
         }
+        if (SettingsFragment.getIsPurchased(this)) {
+            return;
+        }
 
         if (interstitialCount == (Config.INTERSTITIAL_INTERVAL - 1)) {
             AdRequest adRequestInter = new AdRequest.Builder()
@@ -358,6 +375,19 @@ public class MainActivity extends AppCompatActivity implements MenuItemCallback,
         } else {
             interstitialCount++;
         }
+    }
+
+    private boolean isPurchased() {
+        String license = getString(R.string.google_play_license);
+
+        if (!SettingsFragment.getIsPurchased(this) && !"".equals(license)) {
+            String[] extra = new String[] {SettingsFragment.SHOW_DIALOG};
+            HolderActivity.startActivity(this, SettingsFragment.class, extra);
+
+            return false;
+        }
+
+        return true;
     }
 
     /**

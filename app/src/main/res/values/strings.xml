@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">Wallpapers</string>
 
-    <string name="google_play_license"/>
-    <string name="product_id"/>
+    <string name="google_play_license">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnTUFU07FPwp3hXboQVV8jUyCMWxkYsL74pUE0ABYH1kOfJmwTUc6fBYtDdx89FMoWZgupnReiMIKYiGOfcuY0YEfqa1fJLUmLQkBxpD7pVj6ZkBLS/+jMUXHjT+Vu00ALjKatYPZeaqzJsJzqDdzCML+L5b43Km/A6gBW+Py/6LxHuHlfw20CLUw/MIDyGqIQ/7R+byEvtGWDupgFegPiWXoHTQAyFrYIxtvQhhOkupbQt48i+XkLj3/ADXs3H7uIPunPgCq3zDtXYvu4XFryX5iv9xl6vbf0vAboNcMNeEkvGjvnfot5Rdgs9bJkXdkQgE71S3ClYQbKcjyaXBlWwIDAQAB</string>
+    <string name="product_id">com.github.polurival.wallpapers</string>
+    <!--<string name="product_id">android.test.purchased</string>-->
 
 
     <string name="admob_banner_id">ca-app-pub-3567156843644689/5544773327</string>

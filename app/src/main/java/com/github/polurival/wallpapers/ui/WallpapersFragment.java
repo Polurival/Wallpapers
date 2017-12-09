@@ -28,12 +28,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Отображает сетку изображений на вкладке
- *
- * @author Polurival on 12.11.2017.
  */
 
 public class WallpapersFragment extends Fragment implements PermissionsFragment {
@@ -66,7 +63,7 @@ public class WallpapersFragment extends Fragment implements PermissionsFragment 
         String username = this.getArguments().getStringArray(MainActivity.FRAGMENT_DATA)[0];
         baseUrl = "https://" + username + ".tumblr.com/api/read/json?type=photo&num=" + perPage + "&start=";
 
-        listView = rootLayout.findViewById(R.id.gridview);
+        listView = (GridView) rootLayout.findViewById(R.id.gridview);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -99,7 +96,7 @@ public class WallpapersFragment extends Fragment implements PermissionsFragment 
             }
         });
 
-        mSwipeRefreshLayout = rootLayout.findViewById(R.id.swipe_refresh);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootLayout.findViewById(R.id.swipe_refresh);
         mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light,
                 android.R.color.holo_red_light, android.R.color.holo_green_light);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -176,7 +173,7 @@ public class WallpapersFragment extends Fragment implements PermissionsFragment 
         @Override
         protected void onPreExecute() {
             if (initialLoad) {
-                progressDialog = rootLayout.findViewById(R.id.progressBarHolder);
+                progressDialog = (RelativeLayout) rootLayout.findViewById(R.id.progressBarHolder);
             }
         }
 

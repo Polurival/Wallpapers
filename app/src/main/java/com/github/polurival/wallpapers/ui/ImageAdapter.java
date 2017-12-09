@@ -15,8 +15,6 @@ import java.util.ArrayList;
 
 /**
  * Адаптер для заполнения сетки изображений на вкладке
- *
- * @author Polurival on 12.11.2017.
  */
 
 public class ImageAdapter extends ArrayAdapter<TumblrItem> {
@@ -52,7 +50,7 @@ public class ImageAdapter extends ArrayAdapter<TumblrItem> {
             view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_row, parent, false);
             holder = new ViewHolder();
             assert view != null;
-            holder.imageView = view.findViewById(R.id.image);
+            holder.imageView = (ImageView) view.findViewById(R.id.image);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();

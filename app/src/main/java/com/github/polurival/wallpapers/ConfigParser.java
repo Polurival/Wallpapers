@@ -36,8 +36,6 @@ import java.util.List;
  * Затем, если этот элемент принадлежит подменю, добавляем его в подменю, иначе в верхнее меню.
  * В методе saveJSONToCache кешируем результат работы парсера — создаем объект JSON и сохраняем его.
  * В методе getJSONFromCache загружаем кешированный файл меню.
- *
- * @author Polurival on 04.11.2017.
  */
 
 public class ConfigParser extends AsyncTask<Void, Void, Void> {

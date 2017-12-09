@@ -5,10 +5,6 @@ import android.view.MenuItem;
 
 import java.util.List;
 
-/**
- * @author Polurival on 04.11.2017.
- */
-
 public class SimpleMenu extends SimpleAbstractMenu {
 
     public SimpleMenu(Menu menu, MenuItemCallback callback) {

@@ -13,8 +13,6 @@ import java.util.List;
 
 /**
  * Этот класс будет заполнять вкладки, отображая на них соответствующие фрагменты
- *
- * @author Polurival on 12.11.2017.
  */
 
 public class TabAdapter extends FragmentStatePagerAdapter {

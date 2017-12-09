@@ -1,9 +1,5 @@
 package com.github.polurival.wallpapers.ui;
 
-/**
- * @author Polurival on 12.11.2017.
- */
-
 public final class Constants {
 
     private Constants() {

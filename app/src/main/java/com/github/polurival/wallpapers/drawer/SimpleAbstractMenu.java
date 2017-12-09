@@ -12,8 +12,6 @@ import java.util.Set;
 
 /**
  * Базовый класс меню навигации
- *
- * @author Polurival on 04.11.2017.
  */
 
 public abstract class SimpleAbstractMenu {

@@ -7,10 +7,6 @@ import android.util.AttributeSet;
 
 import java.util.List;
 
-/**
- * @author Polurival on 04.11.2017.
- */
-
 public class CustomAppBarLayout extends AppBarLayout
         implements AppBarLayout.OnOffsetChangedListener {
 

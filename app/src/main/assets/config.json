@@ -73,7 +73,7 @@
     "title": "Игры",
     "drawable": "",
     "submenu": "",
-    "iap": false,
+    "iap": true,
     "tabs": [
       {
         "title": "Final Fantasy Art",

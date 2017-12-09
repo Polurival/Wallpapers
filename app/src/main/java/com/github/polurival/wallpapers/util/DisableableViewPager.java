@@ -6,10 +6,6 @@ import android.view.MotionEvent;
 
 import com.booking.rtlviewpager.RtlViewPager;
 
-/**
- * @author Polurival on 04.11.2017.
- */
-
 public class DisableableViewPager extends RtlViewPager {
 
     private boolean enabled;

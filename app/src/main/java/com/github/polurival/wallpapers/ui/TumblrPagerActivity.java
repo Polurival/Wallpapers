@@ -35,8 +35,6 @@ import jp.wasabeef.picasso.transformations.BlurTransformation;
 
 /**
  * Экран для отображения открываемой картинки
- *
- * @author Polurival on 12.11.2017.
  */
 
 public class TumblrPagerActivity extends Activity {
@@ -59,7 +57,7 @@ public class TumblrPagerActivity extends Activity {
             pagerPosition = savedInstanceState.getInt(STATE_POSITION);
         }
 
-        imagePager = findViewById(R.id.pager);
+        imagePager = (ViewPager) findViewById(R.id.pager);
         if (tumblrItems != null) {
             imagePager.setAdapter(new ImagePagerAdapter(tumblrItems));
             imagePager.setCurrentItem(pagerPosition);
@@ -99,14 +97,14 @@ public class TumblrPagerActivity extends Activity {
         public Object instantiateItem(ViewGroup view, final int position) {
             View imageLayout = getLayoutInflater().inflate(R.layout.activity_pager_image, view, false);
             assert imageLayout != null;
-            final ImageView imageView = imageLayout.findViewById(R.id.image);
-            final ImageView imageViewBg = imageLayout.findViewById(R.id.imageBg);
+            final ImageView imageView = (ImageView) imageLayout.findViewById(R.id.image);
+            final ImageView imageViewBg = (ImageView) imageLayout.findViewById(R.id.imageBg);
 
-            final ImageButton btnShare = imageLayout.findViewById(R.id.btnShare);
-            final ImageButton btnSet = imageLayout.findViewById(R.id.btnSet);
-            final ImageButton btnSave = imageLayout.findViewById(R.id.btnSave);
+            final ImageButton btnShare = (ImageButton) imageLayout.findViewById(R.id.btnShare);
+            final ImageButton btnSet = (ImageButton) imageLayout.findViewById(R.id.btnSet);
+            final ImageButton btnSave = (ImageButton) imageLayout.findViewById(R.id.btnSave);
 
-            final ProgressBar spinner = imageLayout.findViewById(R.id.loading);
+            final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
             spinner.setVisibility(View.VISIBLE);
 
             Picasso.with(TumblrPagerActivity.this).load(images.get(position).getUrl())

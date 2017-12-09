@@ -22,10 +22,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * @author Polurival on 12.11.2017.
- */
-
 public class HolderActivity extends AppCompatActivity {
 
     private Class<? extends Fragment> queueItem;
@@ -46,7 +42,7 @@ public class HolderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_holder);
 
-        Toolbar toolbar = findViewById(R.id.toolbar_actionbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -84,6 +80,7 @@ public class HolderActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.settings:
+                openFragment(SettingsFragment.class, new String[0]);
                 return true;
 
             default:
